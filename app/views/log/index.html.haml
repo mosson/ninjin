@@ -11,10 +11,10 @@
       %ul{:class => "#{params[:environment]}"}
         %li.production
           %a{:href => "production"}
-          %p.number-of-logs= Log.where(:environment => "production", :is_closed => false).count
+          %p.number-of-logs= Log.where(:environment => "production").count
         %li.staging
           %a{:href => "staging"}
-          %p.number-of-logs= Log.where(:environment => "staging", :is_closed => false).count
+          %p.number-of-logs= Log.where(:environment => "staging").count
 
     %article.content
       %nav.clearfix
@@ -57,8 +57,8 @@
                   %input.basic-insert-text{:type => "text", :name => "#{search_style}", :placeholder => "placeholder"}                
                 %input.type-submit{:type => "submit", :value => "GO", :id => "submit-button-#{search_style}", :class => "hidden"}
                 %label.basic-button{:for => "submit-button-#{search_style}"} GO
-
-      %form.checkbox{:action => "/#{params[:environment]}", :method => "post"}
+      
+      %form.close-entries{:action => "check", :method => "post"}
         %div.inner
           - @logs.each do |log|
             %div.entry
@@ -66,8 +66,8 @@
               %p.entry-title= log.entry.match(/Started.*/) unless log.entry.nil?
               %p.entry-timestamp= log.occurred_date
                             
-              %input{:type => "checkbox", :name => "checked_id[]", :value => "#{log.id}", :id => "entry-checkbox#{log.id}", :class => "hidden"}
-              %input{:type => "hidden", :name => "checked?", :value => "true"}
+              %input{:type => "checkbox", :name => "checked_id", :value => "#{log.id}", :id => "entry-checkbox#{log.id}", :class => "hidden"}
+              %input{:type => "hidden", :name => "is_checked", :value => "true"}
               
               - if log.error_status == 500
                 %pre.entry.hidden= log.entry
