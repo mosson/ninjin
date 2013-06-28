@@ -11,19 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130628074233) do
+ActiveRecord::Schema.define(:version => 20130628075925) do
 
   create_table "logs", :force => true do |t|
     t.string   "entry",         :limit => 40000
-    t.datetime "timestamp"
+    t.datetime "occurred_date"
     t.string   "environment"
     t.integer  "error_status"
-    t.boolean  "github_issued"
-    t.boolean  "closed"
-    t.datetime "updated"
+    t.boolean  "is_issued"
+    t.boolean  "is_closed"
+    t.datetime "is_updated"
     t.string   "ip_address"
   end
 
-  add_index "logs", ["timestamp", "environment", "error_status"], :name => "altered_logs_index", :unique => true
+  add_index "logs", ["occurred_date", "environment", "error_status"], :name => "altered_logs_index", :unique => true
 
 end
