@@ -11,10 +11,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130626111953) do
+ActiveRecord::Schema.define(:version => 20130628074233) do
 
   create_table "logs", :force => true do |t|
-    t.string   "entry"
+    t.string   "entry",         :limit => 40000
     t.datetime "timestamp"
     t.string   "environment"
     t.integer  "error_status"
@@ -24,6 +24,6 @@ ActiveRecord::Schema.define(:version => 20130626111953) do
     t.string   "ip_address"
   end
 
-  add_index "logs", ["timestamp", "environment", "error_status"], :name => "index_logs_on_timestamp_and_environment_and_error_status", :unique => true
+  add_index "logs", ["timestamp", "environment", "error_status"], :name => "altered_logs_index", :unique => true
 
 end
