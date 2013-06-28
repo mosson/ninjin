@@ -1,0 +1,64 @@
+/* Form::Checkbox */
+article.content .inner > div.entry > div.checkbox_label {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	z-index: -1;
+}
+article.content .inner > div.entry > div.checkbox_label > input{
+	opacity: 0;	
+}
+article.content .inner > div.entry > div.checkbox_label > label > span {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+article.content .inner > div.entry > div.checkbox_label > span {
+	z-index: -1;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 18px; 
+	height: 17px;
+	display: inline-block;
+	font-family: osaka;
+	background-image: image-url("sprite/icon-checkbox.png");
+}
+article.content .inner > div.entry > input:checked ~ div.checkbox_label > span {
+	background-image: image-url("sprite/icon-checkbox_ov.png");
+}
+article.content .inner > div.entry > input:checked ~ form.issue {
+	display: block;
+}
+
+article.content .inner > div.entry > input:checked ~ pre {
+	max-height: 1000px;
+	display: block;
+}
+article.content .inner > div.entry > input:checked ~ pre.entry.part {
+	display:none;
+}
+
+/* Form::issue */
+article.content .inner > div.entry > form.issue {
+	display: none;
+	margin-top: 15px;
+}
+article.content .inner > div.entry > form.issue input.submit{
+	display: none;
+}
+article.content .inner > div.entry > form.issue input:first-child {
+	width: 30%;
+	margin-right: 70%;
+	height: 15px;
+}
+article.content .inner > div.entry > form.issue input:nth-child(2){
+	width: 30%;
+	margin-right: 70%;
+	height: 40px;
+	margin-bottom: 10px;
+}

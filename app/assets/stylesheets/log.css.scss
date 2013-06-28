@@ -1,3 +1,413 @@
-// Place all the styles related to the log controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "sprite/*.png";
+@import "compass/utilities/general/float";
+
+/* Utils
+--------------- */
+
+.clearfix {
+	zoom: 1;
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+}
+li { list-style: none; }
+.hidden { display: none; }
+
+label {
+	cursor: pointer;
+}
+
+/* Styles
+--------------- */
+body {
+	background: #efefef;
+	color: #818181;
+	font-family: Helvetica;
+	font-size: 12px;
+}
+
+header {
+	background: #d8e8e7;
+	border: 1px solid #cedbda;
+	padding: 17px 15px;
+}
+
+/* header */
+header {
+	span {
+		line-height: 21px;
+		.location {
+			font-size: 116%;
+		}
+		.updated-date {
+			color: #a1a1a1;
+			font-size: 91%;
+			text-shadow: 1px 1px 1px #fff;
+			@include float-right;
+		}
+	}
+	> a {
+		text-decoration: none;
+		> span {
+			color: #658684;
+			font-size: 150%;
+			text-shadow: 1px 1px 1px #fff;
+			font-weight: 500;
+			&.updated-date {
+				color: #a1a1a1;
+				font-size: 91%;
+				text-shadow: 1px 1px 1px #fff;
+				@include float-right;
+			}
+		}
+	}
+}
+
+
+/* main */
+.main > .inner {
+	margin-left: 100px;
+	background: #f6f6f6;
+	/*min-height: xxx;	*/
+	border-top: 1px solid #e3e3e3;
+}
+
+/* sidebar */
+nav.sidebar {
+	width: 98px;
+	background: #efefef;
+	border: 1px solid #e3e3e3;
+	margin-left: -100px;
+	@include float-left;
+	> ul {
+		> li {
+			border-right: 1px solid #d7d7d7;
+			border-bottom: 1px solid #d7d7d7;
+			background: #efefef;	
+			width: 100%;
+			padding: 15px 0px;
+			position: relative;
+			/*background: #e5e5e5;	*/
+			&.production {
+				> a {
+					/*background-position: 0 -313px;*/
+					background-image: image-url("sprite/icon-production.png");
+				}
+			}
+			&.staging {
+				> a {
+					/*background-position: 0 -424px;*/
+
+				}
+			}			
+			> a {
+				margin: 0 auto;	
+				background-repeat: no-repeat;
+				display: block;
+				width: 80px; 
+				height: 61px;	
+				background-image: image-url("sprite/icon-staging.png");	
+			}
+		}
+		> li:hover {
+			background: #f8f8f8;
+		}		
+		&.production {
+			li.production {
+				background: #efefef;				
+			}
+			li.staging {
+				a {
+					background-image: image-url("sprite/icon-staging.png");		
+					background-size: 60px;
+					background-position: center center;
+				}
+				p {
+					top: 20px;
+				}
+			}
+		}
+		&.staging {
+			li.staging {
+				background: #efefef;
+			}
+			li.production {
+				a {
+					background-image: image-url("sprite/icon-production.png");
+					background-size: 60px;
+					background-position: center center;
+				}
+				p {
+					top: 20px;
+				}
+			}
+		}		
+	}
+	.number-of-logs {
+		font-size: 4px;
+		color: #fff;
+		position: absolute;
+		top: 11px;
+		right: 18px;
+		background: #658684;
+		border-radius: 2px;
+		padding: 0 10px;
+	}
+}
+
+
+/* Article Content */
+article.content {
+	@include float-left;
+	margin-bottom: 40px;
+	width: 100%;
+	position: relative;
+	> .inner {
+		min-width: 700px;		
+	}
+}
+
+div.entry {
+	border-right: 1px solid #e8e8e8;
+	border-bottom: 1px solid #e8e8e8;	
+	padding: 20px 74px 20px 74px;
+	position: relative;
+	z-index: 1;
+	&:hover {
+		background: #d8e8e7;	
+	}
+	&:nth-child(2n+1) {
+			background: #fff;
+	}
+	&:nth-child(2n) {
+		background: #f8f8f8;	
+	}
+	> div.github-issued {
+		width: 48px;
+		height: 48px;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		background-image: image-url("sprite/label-git.png");
+	}
+	> pre.entry {
+		background: #efefef;
+		border: 1px solid #bfbfbf;
+		color: #c07070;
+		font-size: 83%;
+		padding: 10px;
+		line-height: 28px;
+		max-height: 19em;
+		overflow: hidden;
+		overflow-x: scroll;
+	}
+	p.entry-title {
+		font-size: 100%;
+		line-height: 2;
+		color: #818181;
+		font-weight: bold;
+	}
+	p.entry-timestamp {
+		color: #a1a1a1;
+		margin-bottom: 10px;
+	}
+}
+
+/* Sub Navigation */
+ul.sub-navigation {
+	background: #f6f6f6;
+	border: 1px solid #e8e8e8;
+	@include float-right;	
+	> li {
+		@include float-left;
+		display: block;
+		font-size: 83%;	
+		text-align: center;
+		height: 38px;
+		border-left: 1px solid #e8e8e8;
+		&:hover {
+			background: #658684;
+			> label {
+				> span {
+					color: #fff;
+					> span {
+						background-position: 0 -254px; 
+					}	
+				}
+			}
+		}
+		> label {
+			> span {
+				padding: 0px 5px;
+				display: inline-block;
+				line-height: 38px;
+				text-decoration: none;
+				color: #707070;
+			}
+		}
+		&:last-child {
+			width: 40px;
+			padding: 0px;	
+			> label {
+				> span {
+					padding: 15px;
+					display: block;
+					&:hover {
+						> span { 
+							background-image: image-url("sprite/icon-nav-down_ov.png");
+							background-position: 0px 0px;
+						}
+					}
+					> span {
+						background-image: image-url("sprite/icon-nav-down.png");
+						width: 12px;
+						height: 9px;
+						display: block;
+					}
+				}				
+			}
+		}
+	}
+}
+
+/* Pull Down Navigation */
+input#pull-down-point, input.type-submit ~ label.basic-button {
+	position: absolute;
+	right: 0px;
+	bottom: -40px;
+}
+input#pull-down-point:checked ~ .pull-down-navigation{
+	display: block;
+}
+.pull-down-navigation {
+	width: 100%;
+	background: #f6f6f6;
+	box-shadow: 2px 3px 7px #999;
+	z-index: 3;
+	position: absolute;
+	top: 40px;
+	left: 0px;
+	padding: 12px;
+	display: none;	
+	> p {
+		margin-bottom: 10px;
+	}	
+	ul > li {
+		@include float-left;
+		height: 80px;
+		padding: 10px 15px;
+		border-right: 1px solid #d9d9d9;
+		border-left: 1px solid #fff;
+		form {
+			position: relative;
+		}
+	}
+}
+.pull-down-navigation > ul > li:first-child { 
+	border-left: 0;
+	padding-left: 0;
+}
+.pull-down-navigation > ul > li:last-child { 
+	border-right: 0;
+}
+.pull-down-navigation > ul > li:last-child .basic-insert-text {
+	width: 70px;
+	margin-left: 17px;
+	color: #787878;
+}
+.pull-down-navigation .icon-arrow {
+	position: absolute;
+	top: 11px;
+	left: 85px;
+	width: 7px;
+	height: 11px;
+	display: block;
+	background-image: image-url("sprite/icon-arrow.png");
+}
+
+
+.pull-down-navigation > ul > li:last-child .basic-insert-text:first-child {	
+	margin-left: 0px;
+}
+
+::-webkit-input-placeholder {
+   color: #a4bdbb;
+   font-size: 91%;
+}
+:-moz-placeholder { /* Firefox 18- */
+   color: #a4bdbb;
+   font-size: 91%;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: #a4bdbb;
+   font-size: 91%;  
+}
+
+:-ms-input-placeholder {  
+   color: #a4bdbb;
+   font-size: 91%;  
+}
+.pull-down-navigation > ul > li > span.sub-title {
+	color: #a1a1a1;
+	font-size: 91%;
+}
+
+
+ul.search-result {
+	margin-left: 13px;
+	margin-top: 13px;
+	zoom: 1;
+	@include float-left;
+}
+
+/* Parts' Styles
+--------------- */
+.basic-button {
+	background: #72908e;
+	padding: 4px 8px;
+	border-radius: 3px;
+	color: #fff;
+	font-size: 83%;
+	text-shadow: 0px -1px 1px rgba(0,0,0,0.8);	
+}
+.basic-button:hover {
+	background: #79a19f;
+}
+.large-button {
+	background: #72908e;
+	border-radius: 3px;
+	color: #fff;
+	text-shadow: 0px -1px 1px rgba(0,0,0,0.8);	
+	padding: 6px 12px;
+	font-size: 108%;
+}
+.basic-insert-text {
+	border: 1px solid #72908e;
+	box-shadow: inset 1px 4px 9px -6px rgba(0,0,0,0.5);
+	margin-top: 6px;
+	padding: 3px;
+	width: 120px;
+}
+textarea.basic-insert-text {
+	width: 30%;
+  margin-right: 70%;
+	margin-bottom: 10px;
+}
+.check-buttons {	
+	@include float-right;
+	margin-top: 13px;
+	margin-right: 13px;
+}
+
+/* Invalid Page */
+div.invalid-content {	
+	padding: 20px;
+	margin-top: 10px;
+	background: #fafafa;
+}
+h1 {
+	font-size: 180%!important;
+}
