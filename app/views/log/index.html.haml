@@ -1,8 +1,8 @@
-%form{:action => "/#{params[:environment]}", :method => "post"}  
-  %input{:type => "hidden", :value => "true", :name => "closed"}
+%form{:action => "/#{params[:environment]}/closed", :method => "post"}  
+  %input{:type => "hidden", :value => "true", :name => "is_closed"}
   %input{:type => "submit", :value => "CLOSED", :id => "closed_button", :class => "hidden"}
-%form{:action => "/#{params[:environment]}", :method => "post"}  
-  %input{:type => "hidden", :value => "true", :name => "open"}
+%form{:action => "/#{params[:environment]}/open", :method => "post"}  
+  %input{:type => "hidden", :value => "true", :name => "is_open"}
   %input{:type => "submit", :value => "OPEN", :id => "open_button", :class => "hidden"}  
 
 %div.main
@@ -11,15 +11,15 @@
       %ul{:class => "#{params[:environment]}"}
         %li.production
           %a{:href => "production"}
-          %p.number-of-logs= Log.where(:environment => "production", :closed => false).count
+          %p.number-of-logs= Log.where(:environment => "production").count
         %li.staging
           %a{:href => "staging"}
-          %p.number-of-logs= Log.where(:environment => "staging", :closed => false).count
+          %p.number-of-logs= Log.where(:environment => "staging").count
 
     %article.content
       %nav.clearfix
-
-        = haml :_paginate
+        
+        = paginate @logs
 
         - unless params.nil?
           %ul.search-result
@@ -57,17 +57,17 @@
                   %input.basic-insert-text{:type => "text", :name => "#{search_style}", :placeholder => "placeholder"}                
                 %input.type-submit{:type => "submit", :value => "GO", :id => "submit-button-#{search_style}", :class => "hidden"}
                 %label.basic-button{:for => "submit-button-#{search_style}"} GO
-
-      %form.checkbox{:action => "/#{params[:environment]}", :method => "post"}
+      
+      %form.close-entries{:action => "check", :method => "post"}
         %div.inner
           - @logs.each do |log|
             %div.entry
-              = (log.github_issued != false) ? "<div class=\"github-issued\"></div>" : ""
-              %p.entry-title= log.entry.match(/Completed.*/)
-              %p.entry-timestamp= log.timestamp
+              = (log.is_issued != false) ? "<div class=\"github-issued\"></div>" : ""
+              %p.entry-title= log.entry.match(/Started.*/) unless log.entry.nil?
+              %p.entry-timestamp= log.occurred_date
                             
-              %input{:type => "checkbox", :name => "checked_id[]", :value => "#{log.id}", :id => "entry-checkbox#{log.id}", :class => "hidden"}
-              %input{:type => "hidden", :name => "checked?", :value => "true"}
+              %input{:type => "checkbox", :name => "checked_id", :value => "#{log.id}", :id => "entry-checkbox#{log.id}", :class => "hidden"}
+              %input{:type => "hidden", :name => "is_checked", :value => "true"}
               
               - if log.error_status == 500
                 %pre.entry.hidden= log.entry
@@ -81,7 +81,7 @@
               %form.issue{:action => "/issue", :method => "post"}
                 %input.basic-insert-text{:type => "text", :name => "title", :placeholder => "Title here"}
                 %textarea.basic-insert-text.wide{:name => "comment", :placeholder => "Comment"}
-                %input.basic-insert-text{:type => "hidden", :name => "body", :value => "#{CGI.unescapeHTML(log.entry)}"}
+                / %input.basic-insert-text{:type => "hidden", :name => "body", :value => "#{CGI.unescapeHTML(log.entry)}"}
                 %input.basic-insert-text{:type => "hidden", :name => "id", :value => "#{log.id}"}
                 %input.submit{:type => "submit", :value => "Post an Issue", :id => "post-issue#{log.id}", :class => "hidden"}
                 %label.basic-button{:for => "post-issue#{log.id}"} Issue on Github
@@ -92,5 +92,4 @@
               %input{:type => "hidden", :name => "if_checked"}
               %input.submit{:type => "submit", :value => "Close Checked Logs", :id => "close-issue", :class => "hidden"}
               %label.large-button{:for => "close-issue"} Close
-      = haml :_paginate        
-= haml :_content_for
+      = paginate @logs

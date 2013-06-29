@@ -13,6 +13,8 @@ gem 'haml-rails'
 gem 'compass'
 gem 'compass-rails'
 
+gem 'kaminari'
+
 group :development do
   gem 'hpricot'
   gem 'ruby_parser'

@@ -42,3 +42,4 @@ config/server.key
 public/uploads
 
 /db/csv/
+.DS_Store

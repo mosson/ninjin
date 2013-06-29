@@ -1,0 +1,37 @@
+/* Paginate */
+
+nav.pagination {
+	margin-left: 13px;
+	margin-top: 13px;
+	zoom: 1;
+	float: left;
+}
+nav.pagination:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+nav.pagination > span {
+	background: #658684;
+	font-size: 83%;
+	margin-right: 4px;
+	text-align: center;
+	float: left;
+	display: block;
+	width: 15px;
+	line-height: 18px;
+	color: #fff;
+	> a {
+		display: block;
+		width: 15px;
+		line-height: 18px;
+		text-decoration: none;
+		color: #fff;
+	}
+	&.gap {
+		display: none;
+	}
+	&.current {
+		width: 20px;
+	}
+}

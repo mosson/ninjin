@@ -2,10 +2,10 @@
 %html  
   %head
     %title= content_for?(:title) ? yield(:title) : "Log Tracker"
-    = stylesheet_link_tag "application", :media => :all    
+    = stylesheet_link_tag "application", :media => :all
   %body
     %header
       %a.logo{:href => "/"}
         %span LOG TRACKER
-        %span.updated-date Last Updated At: #{Log.first.updated}
+        %span.updated-date Last Updated At: #{Log.first.occurred_date}
     = yield
