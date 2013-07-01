@@ -1,7 +1,7 @@
 #coding: utf-8
 
 class LogController < ApplicationController
-	def index		
+	def index
 		@backtrace   = params[:backtrace]
 		@status_code = params[:status_code]	
 		@date_from   = params[:date_from]
@@ -15,12 +15,22 @@ class LogController < ApplicationController
 		@logs = Log.where(:environment => "production") if @environment == "production"
 		@logs = Log.where(:environment => "staging") if @environment == "staging"
 
-		@logs = Log.where(:environment => @environment, :is_closed => true) if @closed == "true"
-		@logs = Log.where(:environment => @environment, :is_closed => false) if @open == "true"
+		@logs = Log.where(:environment => @environment, :is_closed => true) if params[:commit] == "CLOSED"
+		@logs = Log.where(:environment => @environment, :is_closed => false) if params[:commit] == "OPEN"
 
 		respond_to do |format|
 			format.html
 		end
+	end
+
+	def test		
+		@is_issued = params[:is_issued] unless params[:is_issued].nil?
+		
+		
+		respond_to do |format|
+			format.html
+		end
+
 	end
 
 	def invalid

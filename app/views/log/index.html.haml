@@ -1,9 +1,9 @@
-%form{:action => "/#{params[:environment]}/closed", :method => "post"}  
-  %input{:type => "hidden", :value => "true", :name => "is_closed"}
-  %input{:type => "submit", :value => "CLOSED", :id => "closed_button", :class => "hidden"}
-%form{:action => "/#{params[:environment]}/open", :method => "post"}  
-  %input{:type => "hidden", :value => "true", :name => "is_open"}
-  %input{:type => "submit", :value => "OPEN", :id => "open_button", :class => "hidden"}  
+= form_tag({:controller => "log", :action => 'index'})
+= hidden_field :log, 'is_closed', :value => "true"
+= submit_tag 'button_closed', :value => "CLOSED", :id => "button_closed", :class => "hidden"
+= form_tag({:controller => "log", :action => 'index'})
+= hidden_field :log, 'is_open', :value => "true"
+= submit_tag 'button_open', :value => "OPEN", :id => "button_open", :class => "hidden"
 
 %div.main
   %div.inner.clearfix
@@ -19,7 +19,7 @@
     %article.content
       %nav.clearfix
         
-        = paginate @logs
+        / = paginate @logs
 
         - unless params.nil?
           %ul.search-result
@@ -28,10 +28,10 @@
               %span Logs Found
         %ul.sub-navigation.clearfix
           %li
-            %label{:for => "open_button"}
+            %label{:for => "button_open"}
               %span.label OPEN
           %li
-            %label{:for => "closed_button"}
+            %label{:for => "button_closed"}
               %span.label CLOSED
           %li                   
             %label{:for => "pull-down-point"}
@@ -92,4 +92,4 @@
               %input{:type => "hidden", :name => "if_checked"}
               %input.submit{:type => "submit", :value => "Close Checked Logs", :id => "close-issue", :class => "hidden"}
               %label.large-button{:for => "close-issue"} Close
-      = paginate @logs
+      / = paginate @logs
