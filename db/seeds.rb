@@ -3,7 +3,7 @@ require 'active_record'
 
 data = []
 files = []
-dir = Dir.new("./db/csv")
+dir = Dir.new("./db/seeds")
 
 dir.each do |file|
 	if file.match(/[0-9]{8}/)
@@ -26,7 +26,6 @@ data.each do |log|
 	begin
 		logs = Log.new(log) unless log[:entry].nil?
 		logs.save unless logs.nil?
-	# rescue ActiveRecord::RecordNotUnique => e
 	rescue => e
 		puts e	
 	end	
