@@ -41,5 +41,6 @@ config/server.key
 .idea/*
 public/uploads
 
-/db/csv/
+/db/seeds/
 .DS_Store
+
