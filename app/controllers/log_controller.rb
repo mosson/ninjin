@@ -8,25 +8,19 @@ class LogController < ApplicationController
 		@date_to     = params[:date_to]
 		@closed      = params[:is_closed]
 		@open      	 = params[:is_open]
-		@ip_address	 = params[:ip_address]
+		@environment = params[:environment]
 		
 		@logs = Log.all
 
-		@logs = Log.where(:environment => "production").page(params[:page]).per(10) if @environment == "production"
-		@logs = Log.where(:environment => "staging").page(params[:page]).per(10) if @environment == "staging"
+		@logs = Log.where(:environment => "production") if @environment == "production"
+		@logs = Log.where(:environment => "staging") if @environment == "staging"
+
+		@logs = Log.where(:environment => @environment, :is_closed => true) if @closed == "true"
+		@logs = Log.where(:environment => @environment, :is_closed => false) if @open == "true"
 
 		respond_to do |format|
 			format.html
 		end
-	end
-
-	def open_or_closed
-		@environment = params[:environment]
-
-		@logs = Log.where(:environment => @environment, :is_closed => true) if params[:is_closed] == "true"
-		@logs = Log.where(:environment => @environment, :is_closed => false) if params[:is_open] == "true"
-		
-		render :action => "index", :layout => "log"
 	end
 
 	def invalid
