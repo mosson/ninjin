@@ -25,6 +25,12 @@ $ rails server
 
 ## Usage
 
+Start backing up logs
+
+```
+$ rake backup:launch
+```
+
 Backup logs from remote machine.
 
 ```
