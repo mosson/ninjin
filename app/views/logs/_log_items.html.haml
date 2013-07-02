@@ -1,0 +1,32 @@
+%form.close-entries{:action => "check", :method => "get"}
+  %div.inner
+    - @logs.each do |log|
+      %div.entry
+        = (log.is_issued != false) ? "<div class=\"github-issued\"></div>" : ""
+        %p.entry-title= log.entry.match(/Started.*/) unless log.entry.nil?
+        %p.entry-timestamp= log.occurred_date
+                    
+        %input{:type => "checkbox", :name => "checked_id", :value => "#{log.id}", :id => "entry-checkbox#{log.id}", :class => "hidden"}
+        %input{:type => "hidden", :name => "is_checked", :value => "true"}
+      
+        - if log.error_status == 500
+          %pre.entry.hidden= log.entry
+          %pre.entry.part= log.entry.match(/Completed.*/m)
+        - else
+          %pre.entry= log.entry
+        %div.checkbox_label
+          %label{:for => "entry-checkbox#{log.id}"}
+            %span
+          %span
+        %form.issue{:action => "/issue", :method => "post"}
+          %input.basic-insert-text{:type => "text", :name => "title", :placeholder => "Title here"}
+          %textarea.basic-insert-text.wide{:name => "comment", :placeholder => "Comment"}
+          / %input.basic-insert-text{:type => "hidden", :name => "body", :value => "#{CGI.unescapeHTML(log.entry)}"}
+          %input.basic-insert-text{:type => "hidden", :name => "id", :value => "#{log.id}"}
+          %input.submit{:type => "submit", :value => "Post an Issue", :id => "post-issue#{log.id}", :class => "hidden"}
+          %label.basic-button{:for => "post-issue#{log.id}"} Issue on Github
+      %ul.check-buttons
+        %li
+          = hidden_field 'if_checked', 'true'
+          = submit_tag 'Close Checked Logs', :id => "close-issue"
+          = label_tag 'close-issue', 'Closed', :class => "large-button"

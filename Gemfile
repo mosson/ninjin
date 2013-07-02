@@ -48,3 +48,7 @@ gem 'capistrano'
 gem 'capistrano-ext'
 gem 'capistrano_colors'
 gem 'rvm-capistrano'
+
+# extract-errors
+gem "net-ssh"
+gem "net-scp"

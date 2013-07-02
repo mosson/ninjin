@@ -47,3 +47,6 @@ public/uploads
 
 lib/extract-errors/backup/
 lib/extract-errors/conf
+
+/backup
+config/conf.yaml

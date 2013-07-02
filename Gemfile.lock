@@ -184,6 +184,8 @@ DEPENDENCIES
   hpricot
   jquery-rails
   kaminari
+  net-scp
+  net-ssh
   quiet_assets
   rails (= 3.2.11)
   ruby_parser

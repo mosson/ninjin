@@ -1,0 +1,65 @@
+= form_tag(environment_logs_path, :method => "get") do
+  = hidden_field 'is_closed', 'true'
+  = submit_tag 'CLOSED', :id => "button_closed", :class => "hidden"
+= form_tag(environment_logs_path, :method => "get") do
+  = hidden_field 'is_closed', 'false'
+  = submit_tag 'OPEN', :id => "button_open", :class => "hidden"
+
+%div.main
+  %div.inner.clearfix
+    %nav.sidebar
+      %ul{:class => "#{params[:environment]}"}
+        %li.production
+          = link_to '', (environment_logs_path('production'))
+          %p.number-of-logs= Log.where(:environment => "production").count
+        %li.staging
+          = link_to '', (environment_logs_path('staging'))
+          %p.number-of-logs= Log.where(:environment => "staging").count
+
+    %article.content
+      %nav.clearfix
+        
+        = paginate @logs
+
+        - unless params.nil?
+          %ul.search-result
+            %li
+              %span= @logs.count
+              %span Logs Found
+        %ul.sub-navigation.clearfix
+          %li
+            %label{:for => "button_open"}
+              %span.label OPEN
+          %li
+            %label{:for => "button_closed"}
+              %span.label CLOSED
+          %li                   
+            %label{:for => "pull-down-point"}
+              %span
+                %span
+
+      %input{:type => "checkbox", :id => "pull-down-point", :class => "hidden"}
+      %div.pull-down-navigation
+        %p SERACH CONDITION
+        %ul.clearfix
+
+          - ["backtrace", "status_code", "ip_address", "timestamp"].each do |search_style|          
+            %li
+              %span.sub-title #{search_style.upcase.sub("_", " ")}
+              %form{:action => "/#{params[:environment]}", :method => "post"}
+
+                - if search_style == "timestamp"
+                  %input.basic-insert-text{:type => "text", :name => "date_from", :placeholder => "DATE"}
+                  %span.icon-arrow
+                  %input.basic-insert-text{:type => "text", :name => "date_to", :placeholder => "DATE"}    
+
+                - else
+                  %input.basic-insert-text{:type => "text", :name => "#{search_style}", :placeholder => "placeholder"}                
+                %input.type-submit{:type => "submit", :value => "GO", :id => "submit-button-#{search_style}", :class => "hidden"}
+                %label.basic-button{:for => "submit-button-#{search_style}"} GO
+    
+      = render(:partial => "log_items")
+
+
+
+      = paginate @logs
