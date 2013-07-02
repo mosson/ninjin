@@ -7,7 +7,8 @@ class LogsController < ApplicationController
 		@logs = Log.scoped
 		@page = params[:page]
 
-		@logs = @logs.where(:environment => @environment).pagination unless @environment.nil?
+		@logs = @logs.where(:environment => @environment).page(@page).per(10) unless @environment.nil?
+
 
 		@logs = @logs.where(:is_closed => true) if params[:commit] == "CLOSED"
 		@logs = @logs.where(:is_closed => false) if params[:commit] == "OPEN"
@@ -18,21 +19,26 @@ class LogsController < ApplicationController
 	end
 
 	def invalid
-		link_to "/staging" if params[:invalid] == "staging"
-		link_to "/production" if params[:invalid] == "production"
+		redirect_to "/staging" if params[:invalid] == "staging"
+		redirect_to "/production" if params[:invalid] == "production"
 	end
 
 	def check
-		@environment = params[:environment]		
+
+		@logs = Log.scoped.where(:environment => @environment, :is_closed => true)
+		
 		unless params[:checked_id].nil?
 			# params[:checked_id].each do |id|
 				Log.where(:id => params[:checked_id]).first.update_attribute(:is_closed, true)
 				
-				@logs = @logs.where(:environment => @environment, :closed => true)
-				render :action => "index", :layout => "log"
+				@logs = @logs.where(:environment => @environment, :is_closed => true).page(@page).per(10)
+				render :action => "index", :layout => "logs"
 			# end
-			link_to "/#{params[:environment]}"
+			
 		end
+
+		# redirect_to "/#{params[:environment]}"
+
 	end	
 
 end

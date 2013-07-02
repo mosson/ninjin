@@ -4,12 +4,13 @@ LogViewerApp::Application.routes.draw do
 		collection do
 			get '/:environment', as: 'environment'
 
-			post :check,	  as: 'check_close'
-			get :check, 		as: 'check_close'			
+			post :check, 				 as: 'check_closed'
+			get  :check,				 as: 'check_closed'			
+
 		end
 	end
 	
-	# match '/:environment/:invalid', 	:to => 'logs#invalid',					as: 'redirect'
+	
 
 	
 
