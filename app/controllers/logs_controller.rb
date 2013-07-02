@@ -1,7 +1,7 @@
 #coding: utf-8
 
-class LogController < ApplicationController
-	def index		
+class LogsController < ApplicationController
+	def index
 		@environment = params[:environment]
 		
 		@logs = Log.where(:environment => @environment)
@@ -15,8 +15,8 @@ class LogController < ApplicationController
 	end
 
 	def invalid
-		redirect_to "/staging" if params[:invalid] == "staging"
-		redirect_to "/production" if params[:invalid] == "production"
+		link_to "/staging" if params[:invalid] == "staging"
+		link_to "/production" if params[:invalid] == "production"
 	end
 
 	def check
@@ -28,7 +28,7 @@ class LogController < ApplicationController
 				@logs = @logs.where(:environment => @environment, :closed => true)
 				render :action => "index", :layout => "log"
 			# end
-			redirect_to "/#{params[:environment]}"
+			link_to "/#{params[:environment]}"
 		end
 	end	
 
