@@ -20,9 +20,9 @@ begin
 	raise "Please select an module" if ARGV.length == 0
 
 rescue => e
-	# print(<<-"EOF")
- #  "No such an option #{modules}"
- #  "Please check out usage in README.md"
-	# EOF
+	print(<<-"EOF")
+  "No such an option #{modules}"
+  "Please check out usage in README.md"
+	EOF
 	puts e
 end
