@@ -1,32 +1,36 @@
 #coding: utf-8
 
 class LogController < ApplicationController
-	def index		
+	def index
 		@backtrace   = params[:backtrace]
 		@status_code = params[:status_code]	
 		@date_from   = params[:date_from]
 		@date_to     = params[:date_to]
 		@closed      = params[:is_closed]
 		@open      	 = params[:is_open]
-		@ip_address	 = params[:ip_address]
+		@environment = params[:environment]
 		
 		@logs = Log.all
 
-		@logs = Log.where(:environment => "production").page(params[:page]).per(10) if @environment == "production"
-		@logs = Log.where(:environment => "staging").page(params[:page]).per(10) if @environment == "staging"
+		@logs = Log.where(:environment => "production") if @environment == "production"
+		@logs = Log.where(:environment => "staging") if @environment == "staging"
+
+		@logs = Log.where(:environment => @environment, :is_closed => true) if params[:commit] == "CLOSED"
+		@logs = Log.where(:environment => @environment, :is_closed => false) if params[:commit] == "OPEN"
 
 		respond_to do |format|
 			format.html
 		end
 	end
 
-	def open_or_closed
-		@environment = params[:environment]
-
-		@logs = Log.where(:environment => @environment, :is_closed => true) if params[:is_closed] == "true"
-		@logs = Log.where(:environment => @environment, :is_closed => false) if params[:is_open] == "true"
+	def test		
+		@is_issued = params[:is_issued] unless params[:is_issued].nil?
 		
-		render :action => "index", :layout => "log"
+		
+		respond_to do |format|
+			format.html
+		end
+
 	end
 
 	def invalid

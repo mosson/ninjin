@@ -41,5 +41,9 @@ config/server.key
 .idea/*
 public/uploads
 
-/db/csv/
+/db/seeds/
 .DS_Store
+
+
+lib/extract-errors/backup/
+lib/extract-errors/conf
