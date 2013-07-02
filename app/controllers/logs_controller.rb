@@ -1,17 +1,20 @@
 #coding: utf-8
 
-class LogsController < ApplicationController
+class LogsController < ApplicationController	
+
 	def index
-		@environment = params[:environment]
-		
-		@logs = Log.where(:environment => @environment)
+		@environment = params[:environment]		
+		@logs = Log.scoped
+		@page = params[:page]
+
+		@logs = @logs.where(:environment => @environment).pagination unless @environment.nil?
 
 		@logs = @logs.where(:is_closed => true) if params[:commit] == "CLOSED"
 		@logs = @logs.where(:is_closed => false) if params[:commit] == "OPEN"
 
 		respond_to do |format|
 			format.html
-		end
+		end		
 	end
 
 	def invalid
