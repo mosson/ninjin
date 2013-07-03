@@ -32,11 +32,11 @@
 input:checked ~ div.checkbox_label > span {
 	background-image: image-url("sprite/icon-checkbox_ov.png");
 }
-input:checked ~ form.issue {
+input:checked ~ .issue {
 	display: block;
 }
 input:checked ~ pre {
-	max-height: 1000px;
+	max-height: 1000px !important;
 	display: block;
 }
 input:checked ~ pre.entry.part {
@@ -44,7 +44,7 @@ input:checked ~ pre.entry.part {
 }
 
 /* Form::issue */
-form.issue {
+.issue {
 	display: none;
 	margin-top: 15px;
 

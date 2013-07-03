@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20130628075925) do
 
   create_table "logs", :force => true do |t|
     t.string   "entry",         :limit => 40000
-    t.datetime "occurred_date"
+    t.datetime "occurred_at"
     t.string   "environment"
     t.integer  "error_status"
     t.boolean  "is_issued"
@@ -24,6 +24,6 @@ ActiveRecord::Schema.define(:version => 20130628075925) do
     t.string   "ip_address"
   end
 
-  add_index "logs", ["occurred_date", "environment", "error_status"], :name => "altered_logs_index", :unique => true
+  add_index "logs", ["occurred_at", "environment", "error_status"], :name => "altered_logs_index", :unique => true
 
 end

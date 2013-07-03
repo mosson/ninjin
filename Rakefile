@@ -5,3 +5,16 @@
 require File.expand_path('../config/application', __FILE__)
 
 LogViewerApp::Application.load_tasks
+
+
+namespace :server do
+	task :start do
+		puts "Starting unicorn server..."
+	end
+	task :stop do
+		puts "Stopping uniorn server..."
+	end
+	task :restart do
+		puts "Restarting unicorn server..."
+	end
+end
