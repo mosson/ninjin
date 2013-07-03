@@ -15,7 +15,7 @@ module Retrieve
 		end
 	end
 
-	def fetch_files dir_path
+	def fetch_files(dir_path)
 		puts "started secure copying..."
 		conf = PathFactory.new.conf
 		target_files = {}
@@ -37,7 +37,7 @@ module Retrieve
 							scp.download! file, "#{dir_path}/#{env}"
 							puts file, "#{dir_path}/#{env}"							
 						rescue => e						
-							puts e						
+							puts e
 						end
 					}
 				end
@@ -46,7 +46,7 @@ module Retrieve
 		end
 	end
 
-	def organize_files dir_path
+	def organize_files(dir_path)
 		puts "started gunzip and organizing files..."
 		conf = PathFactory.new.conf
 		pattern = /[0-9]{6}/
