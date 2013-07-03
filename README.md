@@ -2,6 +2,8 @@ ninjin
 ======
 
 This is an application for backup, viewing, and issuing Error Logs.
+If you need more information about rake tasks, run `rake -T "taskname"`
+
 
 ## Settings
 
@@ -17,12 +19,20 @@ environment: "environment_name"
   password: "password_for_ssh_connecting"
 ```
 
+Environment Value
+
+```
+PATH_TO_LOGS="path"
+# set value from root to logs on remote machine.
+```
+
+
+
 Start Server
 
 ```
 $ rake server:start
 ```
-See more about server `rake -T server`
 
 ## Usage
 
@@ -59,6 +69,8 @@ Seed
 ```
 $ rake db:seed
 ```
+
+
 
 ## Dependencies
 
