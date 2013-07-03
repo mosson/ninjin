@@ -13,19 +13,17 @@ namespace :backup do
 
 	namespace :remote do
 		desc "Retrieve logs from remote machine"
-		task :retrieve => ["fetch", "organize"] do
+		task :retrieve => ["fetch", "gunzip", "organize"] do
 			puts "Successfully finished retrieving logs."
 		end
 
 		desc "Fetch log files from remote machine"
 		task :fetch do
-			puts "fetch"
 			Backup.new.fetch_files(path)
 		end
 
-		desc "Gunzip and organizing files"
+		desc "Organize files"
 		task :organize do
-			puts "organize"
 			Backup.new.organize_files(path)
 		end
 
