@@ -1,8 +1,8 @@
 = form_tag(environment_logs_path, :method => "get") do
-  = hidden_field 'is_closed', 'true'
+  = hidden_field :log, :is_closed
   = submit_tag 'CLOSED', :id => "button_closed", :class => "hidden"
 = form_tag(environment_logs_path, :method => "get") do
-  = hidden_field 'is_closed', 'false'
+  = hidden_field :log, :is_open
   = submit_tag 'OPEN', :id => "button_open", :class => "hidden"
 
 .main
@@ -59,7 +59,5 @@
                 %label.basic-button{:for => "submit-button-#{search_style}"} GO
     
       = render(:partial => "log_items")
-
-
 
       = paginate @logs
