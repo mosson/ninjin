@@ -20,8 +20,9 @@ environment: "environment_name"
 Start Server
 
 ```
-$ rails server
+$ rake server:start
 ```
+See more about server `rake -T server`
 
 ## Usage
 
