@@ -7,5 +7,5 @@
     %header
       %a.logo{:href => "/"}
         %span LOG TRACKER
-        %span.updated-date Last Updated At: #{Log.first.occurred_date}
+        %span.updated-date Last Updated At: #{Log.first.occurred_at}
     = yield
