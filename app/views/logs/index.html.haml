@@ -5,8 +5,8 @@
   = hidden_field 'is_closed', 'false'
   = submit_tag 'OPEN', :id => "button_open", :class => "hidden"
 
-%div.main
-  %div.inner.clearfix
+.main
+  .inner.clearfix
     %nav.sidebar
       %ul{:class => "#{params[:environment]}"}
         %li.production
@@ -39,7 +39,7 @@
                 %span
 
       %input{:type => "checkbox", :id => "pull-down-point", :class => "hidden"}
-      %div.pull-down-navigation
+      .pull-down-navigation
         %p SERACH CONDITION
         %ul.clearfix
 
