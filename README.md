@@ -3,7 +3,7 @@ ninjin
 
 This is an application for backup, viewing, and issuing Error Logs.
 If you need more information about rake tasks, run `rake -T "taskname"`
-
+Plase make sure you have a right permissions for connecting remote machines.
 
 ## Settings
 
