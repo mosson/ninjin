@@ -64,45 +64,36 @@ module Retrieve
 
 		# to-do:
 		# 横に長い
+		# DRYに
 
 		conf.keys.each do |env|
 			Dir::entries("#{dir_path}/#{env}").each do |file|
-
-				FileUtils.mkdir_p("#{dir_path}/#{env}/#{file.match(pattern[0])}") unless Dir.exist?("#{dir_path}/#{env}/#{file.match(pattern[0])}")
-
+				unless Dir.exist?("#{dir_path}/#{env}/#{file.match(pattern[0])}")
+					FileUtils.mkdir_p("#{dir_path}/#{env}/#{file.match(pattern[0])}")
+					FileUtils.mkdir_p("#{dir_path}/#{env}/#{file.match(pattern[0])}/nginx")
+					FileUtils.mkdir_p("#{dir_path}/#{env}/#{file.match(pattern[0])}/unicorn")
+				end
 				if file.match(pattern[0])
 					if File.exist?("#{dir_path}/#{env}/#{file}") && !file.match(/gz/)
 						system("mv #{dir_path}/#{env}/#{file} #{dir_path}/#{env}/#{file.match(pattern[0])}/#{file}") if file.match(/log/)
 					end
 				end
 			end
+
 			Dir::entries("#{dir_path}/#{env}").each do |dir|
-				if dir.match(/^[0-9]{6}$/)					
-				Dir::entries("#{dir_path}/#{env}/#{dir}").each do |file| 
-					
+				if dir.match(pattern[0])
+					Dir::entries("#{dir_path}/#{env}/#{dir}").each do |file|
+						if file.match(pattern[1])	&& file.match(pattern[0])
+							system("mv #{dir_path}/#{env}/#{dir}/#{file} #{dir_path}/#{env}/#{dir}/#{file.match(pattern[1])}/#{file}")
 
-					["unicorn", "nginx"].each do |server_env|
-
-						if file.match(/(error.log)/)
-							FileUtils.mkdir_p("#{dir_path}/#{env}/#{dir}/#{file.match(pattern[0])}/#{server_env}") if file.match(/log/)
-						end
-					end				
-
-					if file.match(pattern[1])
-						if File.exist?("#{dir_path}/#{env}/#{dir}/#{file}") && !file.match(/gz/)
-							system("mv #{dir_path}/#{env}/#{dir}/#{file} #{dir_path}/#{env}/#{dir}/#{file.match(pattern[1])}/#{file}") if file.match(/log/)							
+						elsif file.match(/access|error/)
+							system("mv #{dir_path}/#{env}/#{dir}/#{file} #{dir_path}/#{env}/#{dir}/nginx/#{file}")
+							puts " #{dir_path}/#{env}/#{dir}/nginx/"
 						end
 					end
-					if file.match(/(access)||(error)/)
-						system("mv #{dir_path}/#{env}/#{dir}/#{file} #{dir_path}/#{env}/#{dir}/#{file.match(pattern[2])}/#{file}") if file.match(/log/)
-					end
-
 				end
 			end
 		end
-
-		end
 	end
-
 
 end
