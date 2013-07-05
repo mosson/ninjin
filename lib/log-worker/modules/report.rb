@@ -19,6 +19,7 @@ module Report
 
 						entry_sub = []
 						entries = []
+						decorated = []
 
 						if file.match(pattern)
 							data = File.read("#{dir_path}/#{env}/#{dir}/#{file}")
@@ -34,7 +35,7 @@ module Report
 								extract_errors(entry, entry_sub, occurred_at)
 							end							
 
-							decorate_data(dir_path, entry_sub, decorated = [], entries, usage)
+							decorate_data(dir_path, entry_sub, decorated, entries, usage, env)
 
 
 							date = DateTime.parse(file.match(/[0-9]{8}/).to_s)
@@ -67,7 +68,7 @@ module Report
 		end
 	end
 
-	def decorate_data(dir_path, entry_sub, decorated, entries, usage)
+	def decorate_data(dir_path, entry_sub, decorated, entries, usage, env)
 		template =  Dir::pwd + "/lib/log-worker/templates/#{usage}_template.erb"				
 			decorated << ERB.new(File.read(template)).result(binding)
 	end

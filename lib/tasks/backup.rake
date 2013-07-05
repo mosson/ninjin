@@ -14,7 +14,7 @@ namespace :backup do
 
 	namespace :remote do
 
-### Retrieve		
+		### Retrieve
 		desc "Retrieve logs from remote machine"
 		task :retrieve => ["fetch", "organize"] do
 			puts "Successfully finished retrieving logs."
@@ -28,17 +28,19 @@ namespace :backup do
 		desc "Organize files"
 		task :organize do
 			Backup.new.organize_files(path, path_to_report)
-		end		
+		end
 
-### Report
+		### Report
 		desc "Export error log reports"
 		task :report => ["validate"] do
-			puts "Successfully finished exporting reports."
+			puts "Successfully finished exporting reports."			
 		end
 
 		desc "Validate time to JST, extract errors from logs"
 		task :validate do
-			Backup.new.validate_data(path, path_to_report)
+			usage = ENV["template"]
+			Backup.new.validate_data(path, usage)
 		end
+
 	end
 end
