@@ -54,6 +54,8 @@ Export report
 $ rake backup:remote:report
 ```
 
+To select template, please add an option `template="usage"`.
+
 Migration
 
 ```
@@ -73,6 +75,14 @@ $ rake db:seed
 
 
 ## Dependencies
+
+
+
+## Customize
+To add target remote machine, add configuration in conf/conf.yaml
+
+To set report type, add erb file in lib/log-worker/templates/
+Name file as "usage"_template.erb
 
 
 
