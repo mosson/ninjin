@@ -9,8 +9,9 @@ class PathFactory
 		current_dir = Dir.getwd
 		return "#{current_dir}/tmp/logs"
 	end
+
 	def report_path
 		current_dir = Dir.getwd
 		return "#{current_dir}/tmp/report"
-	end
+	end	
 end
