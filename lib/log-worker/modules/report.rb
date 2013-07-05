@@ -1,30 +1,58 @@
 require 'erb'
 
-module Report
-	def validate_data(dir_path, report_path)
+module Report	
+	def validate_data(dir_path, usage)
+		reg = RegFactory.new()
+
 		pattern = /[0-9]{6}/
 		data_arr = []
 
-		Time::DATE_FORMATS[:simple] = "%Y-%m-%d %H:%M:%S %z"
+		Time::DATE_FORMATS[:timezone] = "%Y-%m-%d %H:%M:%S %z"
+		Time::DATE_FORMATS[:simple] = "%d"
+
 		puts "decorating files..."
 		conf = PathFactory.new.conf
 		conf.keys.each do |env|
 			Dir::entries("#{dir_path}/#{env}").each do |dir|
 				if dir.match(pattern)
-					Dir::entries("#{dir_path}/#{env}/#{dir}").each do |file|
-						entry = []
+					Dir::entries("#{dir_path}/#{env}/#{dir}").each do |file|						
+
 						entry_sub = []
+						entries = []
 						decorated = []
 
 						if file.match(pattern)
 							data = File.read("#{dir_path}/#{env}/#{dir}/#{file}")
 
-							extract_errors(data, entry, entry_sub)														
+							reg.entry(data).each do |entry|
 
-							decorate_data(dir_path, entry_sub, decorated)
+								error_status = reg.error_status(entry.to_s).to_s
+								ip_address = reg.ip_addr(entry.to_s).to_s
+								occurred_at = reg.occurred_at(entry.to_s).to_s
+								
+								entries << [entry, occurred_at, error_status, ip_address]
 
-							File.write("#{report_path}/#{env}/#{dir}/#{file}", decorated.join(""))
+								extract_errors(entry, entry_sub, occurred_at)
+							end							
 
+							decorate_data(dir_path, entry_sub, decorated, entries, usage, env)
+
+
+							date = DateTime.parse(file.match(/[0-9]{8}/).to_s)
+							day_before = date - 1
+
+							formatted_date = date.to_s(:simple)
+							formatted_day_before = day_before.to_s(:simple)
+							
+							begin
+
+								path_to_usage = PathFactory.new.custom(usage, env, dir, file, formatted_date, formatted_day_before)
+								File.write(path_to_usage[0], decorated.join(""))
+							rescue Errno::ENOENT => e
+								FileUtils.mkdir_p(path_to_usage[1])
+								retry
+							end
+							
 						end
 					end
 				end
@@ -32,25 +60,19 @@ module Report
 		end
 	end
 
-	def extract_errors(data, entry, entry_sub)
-		data.scan(/^Started[\s\S]+?(?=^Started)/m).each do |entry|
-			if entry.match(/Completed\s[45]/)
+	def extract_errors(entry, entry_sub, date)
+		if entry.match(/Completed\s[45]/)
+			
+			date = DateTime.parse(date.to_s)
+			validated_date = date.new_offset(9.0/24)
 
-				date = entry.to_s.match(/[0-9]{4}-([0-9]{2}-?){2}\s([0-9]{2}:?){3}\s\+[0-9]{4}/)
-				date = DateTime.parse(date.to_s)
-				validated_date = date.new_offset(9.0/24)
-
-				entry_sub << entry.to_s.sub(date.to_s(:simple), validated_date.to_s(:simple))
-			end
+			entry_sub << entry.to_s.sub(date.to_s(:timezone), validated_date.to_s(:timezone))
 		end
 	end
 
-	def decorate_data(dir_path, entry_sub, decorated)
-		fname = Dir::pwd + "/lib/log-worker/template.erb"
-		entry_sub.each do |data|
-			decorated << ERB.new(File.read(fname)).result(binding)
-		end	
+	def decorate_data(dir_path, entry_sub, decorated, entries, usage, env)
+		template =  Dir::pwd + "/lib/log-worker/templates/#{usage}_template.erb"				
+			decorated << ERB.new(File.read(template)).result(binding)
 	end
-
 end
 

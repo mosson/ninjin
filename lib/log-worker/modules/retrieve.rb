@@ -1,13 +1,12 @@
 require 'net/scp'
 require 'net/ssh'
+require './lib/log-worker/modules/reg_factory'
 
 module Retrieve
-	def launch
+	def launch		
 		puts "launching backup..."
 		conf = PathFactory.new.conf
 		current_dir = Dir.getwd
-		usages			= ["backup"]
-
 
 		Dir.mkdir("#{current_dir}/backup")
 		conf.keys.each do |env|
@@ -15,7 +14,7 @@ module Retrieve
 		end
 	end
 
-	def fetch_files(dir_path, path_to_report)
+	def fetch_files(dir_path)
 		puts "started secure copying..."
 		conf = PathFactory.new.conf
 		target_files = {}
@@ -33,7 +32,7 @@ module Retrieve
 			conf.each do |key, val|
 				target_files.each do |target_env, target_files|
 					if target_env == key
-						secure_copy(val, target_files, dir_path, path_to_report, target_env)
+						secure_copy(val, target_files, dir_path, target_env)
 						puts [target_env, target_files]
 					end
 				end
@@ -41,11 +40,9 @@ module Retrieve
 		end
 	end
 
-	def secure_copy(val, target_files, dir_path, path_to_report, target_env)
+	def secure_copy(val, target_files, dir_path, target_env)
 		Net::SCP.start(val["path"], val["user"], {:password => val["options"]}) do |scp|
 			target_files.each { |file|
-
-				FileUtils.mkdir_p("#{path_to_report}/#{target_env}")
 
 				unless File.exist?("#{dir_path}/#{target_env}")
 					FileUtils.mkdir_p("#{dir_path}/#{target_env}") 
@@ -63,7 +60,7 @@ module Retrieve
 		end
 	end
 
-	def organize_files(dir_path, path_to_report)
+	def organize_files(dir_path)
 		puts "started organizing files..."
 		conf = PathFactory.new.conf
 		pattern = [/[0-9]{6}/, /unicorn/, /nginx/]
@@ -73,10 +70,6 @@ module Retrieve
 		
 			Dir::entries("#{path_to_env}").each do |file|
 				matched_date = file.match(pattern[0])
-
-				unless Dir.exist?("#{path_to_report}/#{env}/#{matched_date}")
-					FileUtils.mkdir_p("#{path_to_report}/#{env}/#{matched_date}")
-				end
 
 				unless Dir.exist?("#{path_to_env}/#{matched_date}")
 					FileUtils.mkdir_p("#{path_to_env}/#{matched_date}/nginx")

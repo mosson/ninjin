@@ -1,0 +1,2 @@
+<% entries.each do |entry| %>"<%= entry[0].gsub(/\n/m, "\\n").gsub(/\#{/m, "\#{").gsub(/\"/m, "\"\"") %>","<%= entry[1] %>","<%= env %>","<%= entry[2] %>","false","false","<%= entry[3] %>"
+<% end %>
