@@ -45,9 +45,11 @@ module Report
 							formatted_day_before = day_before.to_s(:simple)
 							
 							begin
-								File.write("#{Dir.getwd}/tmp/#{usage}/#{env}/#{dir}/#{formatted_day_before}-#{formatted_date}.log", decorated.join(""))
+
+								path_to_usage = PathFactory.new.custom(usage, env, dir, file, formatted_date, formatted_day_before)
+								File.write(path_to_usage[0], decorated.join(""))
 							rescue Errno::ENOENT => e
-								FileUtils.mkdir_p("#{Dir.getwd}/tmp/#{usage}/#{env}/#{dir}/")
+								FileUtils.mkdir_p(path_to_usage[1])
 								retry
 							end
 							
